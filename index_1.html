@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ Man City Grammar Challenge — Present Simple</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --sky:#6CABDD;
+  --sky-dark:#1C5FAD;
+  --sky-deeper:#0D3C7A;
+  --gold:#D4AF37;
+  --white:#FFFFFF;
+  --off:#F4F7FC;
+  --text:#1a2340;
+  --muted:#64748b;
+  --success-bg:#D1FAE5;
+  --success-b:#059669;
+  --success-t:#064E3B;
+  --error-bg:#FEE2E2;
+  --error-b:#DC2626;
+  --error-t:#7F1D1D;
+  --hint-bg:#FEF3C7;
+  --hint-b:#D97706;
+  --hint-t:#78350F;
+  --reveal-bg:#EFF6FF;
+  --reveal-b:#1C5FAD;
+  --reveal-t:#0D3C7A;
+  --odd-bg:#F3E8FF;
+  --odd-b:#7C3AED;
+  --odd-t:#4C1D95;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(160deg,var(--sky-deeper) 0%,var(--sky-dark) 40%,#1a7abf 100%);
+  min-height:100vh;
+  padding:24px 16px 80px;
+  color:var(--text);
+}
+
+.wrap{max-width:660px;margin:0 auto}
+
+/* ── HEADER ── */
+.hdr{text-align:center;margin-bottom:28px}
+.hdr-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--gold);color:#1a2340;
+  font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:5px 18px;border-radius:20px;margin-bottom:14px;
+}
+.hdr h1{
+  font-family:'Oswald',sans-serif;
+  font-size:clamp(26px,6vw,44px);font-weight:700;
+  color:#fff;letter-spacing:0.5px;line-height:1.1;
+  margin-bottom:6px;
+  text-shadow:0 2px 16px rgba(0,0,0,0.35);
+}
+.hdr-sub{font-size:14px;color:#B3D4F0;font-weight:400}
+
+/* ── PROGRESS ── */
+.prog-wrap{
+  background:rgba(255,255,255,0.13);
+  border-radius:14px;padding:14px 18px;
+  margin-bottom:22px;
+  display:flex;align-items:center;gap:14px;
+}
+.prog-track{
+  flex:1;height:10px;
+  background:rgba(255,255,255,0.2);
+  border-radius:5px;overflow:hidden;
+}
+.prog-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),#f0c040);
+  border-radius:5px;
+  transition:width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.prog-label{
+  font-size:13px;font-weight:700;color:#fff;
+  white-space:nowrap;min-width:52px;text-align:right;
+}
+
+/* ── CARD ── */
+.card{
+  background:#fff;border-radius:20px;
+  padding:26px 22px 22px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.22);
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:5px;
+  background:linear-gradient(90deg,var(--sky-dark),var(--sky),var(--gold),var(--sky));
+}
+
+/* ── META ROW ── */
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;letter-spacing:0.7px;
+  text-transform:uppercase;padding:4px 12px;border-radius:20px;
+}
+.badge-fill{background:#DBEAFE;color:#1e40af}
+.badge-odd{background:var(--odd-bg);color:var(--odd-b)}
+.q-num{font-size:12px;font-weight:600;color:#94a3b8;margin-left:auto}
+
+/* ── ATTEMPTS DOTS ── */
+.dots{display:flex;gap:5px;align-items:center;margin-top:2px}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#e2e8f0;transition:background 0.2s;
+}
+.dot.used{background:#DC2626}
+
+/* ── QUESTION TEXT ── */
+.q-text{
+  font-size:16px;font-weight:500;
+  color:var(--text);line-height:1.65;
+  margin-bottom:4px;
+}
+.q-blank{
+  display:inline-block;
+  border-bottom:2.5px solid var(--sky-dark);
+  min-width:80px;text-align:center;
+  font-weight:700;color:var(--sky-dark);
+  padding:0 4px;margin:0 2px;
+}
+.q-context{
+  font-size:13px;color:var(--muted);
+  background:var(--off);border-radius:10px;
+  padding:10px 14px;margin-bottom:14px;
+  border-left:3px solid var(--sky);
+  line-height:1.55;
+}
+.q-sub{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+
+/* ── OPTIONS ── */
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.opt{
+  display:flex;align-items:center;gap:12px;
+  background:var(--off);border:2px solid #E2E8F0;
+  border-radius:12px;padding:11px 15px;
+  font-size:15px;font-weight:500;color:var(--text);
+  cursor:pointer;text-align:left;
+  font-family:'Inter',sans-serif;
+  transition:all 0.15s;width:100%;line-height:1.4;
+}
+.opt:hover:not(:disabled){
+  border-color:var(--sky-dark);
+  background:#EFF6FF;transform:translateY(-1px);
+}
+.opt:disabled{cursor:default;transform:none}
+.opt-ltr{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;min-width:28px;border-radius:50%;
+  background:#E2E8F0;color:#475569;
+  font-size:12px;font-weight:800;
+  transition:all 0.15s;flex-shrink:0;
+}
+.opt.correct{background:var(--success-bg);border-color:var(--success-b);color:var(--success-t)}
+.opt.correct .opt-ltr{background:var(--success-b);color:#fff}
+.opt.wrong{background:var(--error-bg);border-color:var(--error-b);color:var(--error-t)}
+.opt.wrong .opt-ltr{background:var(--error-b);color:#fff}
+.opt.reveal-ans{background:var(--reveal-bg);border-color:var(--reveal-b);color:var(--reveal-t)}
+.opt.reveal-ans .opt-ltr{background:var(--reveal-b);color:#fff}
+
+/* ── FEEDBACK ── */
+.fb{
+  margin-top:16px;border-radius:12px;padding:13px 16px;
+  font-size:14px;line-height:1.65;display:none;
+  animation:fadeUp 0.22s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.fb-ok{background:var(--success-bg);border-left:4px solid var(--success-b);color:var(--success-t)}
+.fb-wrong{background:var(--error-bg);border-left:4px solid var(--error-b);color:var(--error-t)}
+.fb-hint{background:var(--hint-bg);border-left:4px solid var(--hint-b);color:var(--hint-t)}
+.fb-reveal{background:var(--reveal-bg);border-left:4px solid var(--reveal-b);color:var(--reveal-t)}
+.fb-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+
+/* ── NAV ── */
+.nav{display:flex;justify-content:flex-end;margin-top:20px}
+.btn-next{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;
+  background:linear-gradient(135deg,var(--sky-dark),var(--sky-deeper));
+  color:#fff;border:none;border-radius:12px;
+  font-size:15px;font-weight:700;
+  font-family:'Oswald',sans-serif;letter-spacing:0.5px;
+  cursor:pointer;transition:all 0.15s;
+  box-shadow:0 4px 14px rgba(28,95,173,0.4);
+}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(28,95,173,0.5)}
+.btn-next:disabled{background:#CBD5E1;box-shadow:none;cursor:default;transform:none}
+
+/* ── END SCREEN ── */
+.end{
+  background:#fff;border-radius:20px;padding:40px 24px;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,0.22);
+  display:none;position:relative;overflow:hidden;
+}
+.end::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--sky-dark),var(--sky),var(--gold));
+}
+.end-icon{font-size:56px;margin-bottom:12px}
+.end-title{
+  font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;
+  color:var(--sky-deeper);margin-bottom:4px;
+}
+.end-score{
+  font-family:'Oswald',sans-serif;font-size:68px;font-weight:700;
+  color:var(--sky-dark);line-height:1;margin:14px 0 4px;
+}
+.end-sub{font-size:15px;color:var(--muted);margin-bottom:22px}
+.end-msg{
+  background:var(--off);border-radius:12px;
+  padding:16px 20px;font-size:14px;color:var(--text);
+  line-height:1.65;margin-bottom:28px;
+  border:1px solid #DBEAFE;
+}
+.btn-restart{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 36px;
+  background:linear-gradient(135deg,var(--sky-dark),var(--sky-deeper));
+  color:#fff;border:none;border-radius:12px;
+  font-size:16px;font-weight:700;font-family:'Oswald',sans-serif;
+  cursor:pointer;transition:all 0.15s;
+  box-shadow:0 4px 14px rgba(28,95,173,0.4);
+}
+.btn-restart:hover{transform:translateY(-2px)}
+
+@media(max-width:480px){
+  .card{padding:20px 14px 16px}
+  .opt{font-size:14px}
+  .hdr h1{font-size:26px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="hdr-badge">⚽ Manchester City · Grammar Challenge</div>
+    <h1>The City Grammar Kit</h1>
+    <p class="hdr-sub">Present Simple · A2 Level · 20 Questions</p>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <div class="prog-label" id="prog-label">0 / 20</div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="end" id="end">
+    <div class="end-icon" id="end-icon">🏆</div>
+    <div class="end-title" id="end-title">Full Time!</div>
+    <div class="end-score" id="end-score">—</div>
+    <div class="end-sub" id="end-sub">out of 20</div>
+    <div class="end-msg" id="end-msg"></div>
+    <button class="btn-restart" onclick="restart()">🔄 Play Again</button>
+  </div>
+
+</div>
+<script>
+// ── QUESTIONS ──
+const QS = [
+  // ── FILL-IN Q1-16 ──
+  {
+    type:'fill',
+    text:'Every morning, Haaland ___ a big breakfast before he goes to training.',
+    opts:['eats','skips','forgets','orders'],
+    correct:0,
+    hints:[
+      'Think about what "before he goes to training" tells you. Does he prepare properly or skip things?',
+      'A player as dedicated as Haaland prepares carefully. "Skips," "forgets," and "orders" don\'t fit that idea. Which verb means he actually has his meal?'
+    ],
+    ok:'Correct! "Eats" fits because the context tells us Haaland prepares properly before training. Also notice: Haaland is singular (he/she/it), so the verb needs -s. "Eat" would be wrong here.',
+    reveal:'The answer is "eats." Haaland is singular, so the verb takes -s. And the context — preparing before training — points to eating, not skipping or forgetting.'
+  },
+  {
+    type:'fill',
+    text:'De Bruyne always ___ the ball to teammates who are in a better position, even when he can shoot himself.',
+    opts:['shoots','passes','holds','loses'],
+    correct:1,
+    hints:[
+      '"Even when he can shoot himself" is a big clue. It means he chooses NOT to shoot. So what does he do instead?',
+      'If he chooses not to shoot, he must be giving the ball to someone else. Which word means that?'
+    ],
+    ok:'Great! "Passes" is correct. The phrase "even when he can shoot himself" tells us De Bruyne chooses his teammates over personal glory — that\'s passing, not shooting, holding, or losing.',
+    reveal:'The answer is "passes." The key clue is "even when he can shoot himself" — it tells you he gives the ball away instead of shooting.'
+  },
+  {
+    type:'fill',
+    text:'Ederson ___ the ball to his teammates quickly after he catches it — he never wastes time.',
+    opts:['throws','throw','drops','kick'],
+    correct:0,
+    hints:[
+      'Two of these options use the same verb — one with -s and one without. Ederson is one person (he). Which form is correct for he/she/it?',
+      'Ederson = he = singular. The rule: he/she/it + verb + -s. So "throw" is wrong. And "kick" is missing its -s too. That leaves one correct answer.'
+    ],
+    ok:'Correct! Ederson is singular (he), so the verb needs -s: "throws." "Throw" is wrong because it has no -s. "Kick" is wrong for the same reason. "Drops" doesn\'t fit the meaning.',
+    reveal:'The answer is "throws." Ederson = he = singular, so the verb needs -s. "Throw" and "kick" are missing the -s ending. "Drops" contradicts "never wastes time."'
+  },
+  {
+    type:'fill',
+    text:'After every training session, Foden ___ behind to practise alone while the other players go home.',
+    opts:['stay','stays','leaves','rest'],
+    correct:1,
+    hints:[
+      'Foden is one person. Look at the options carefully — two of them use the same verb. Which form goes with he/she/it?',
+      'He/she/it + verb + -s. "Stay" has no -s, so it\'s wrong. "Rest" has no -s either. "Leaves" has -s but means the opposite of staying behind.'
+    ],
+    ok:'Perfect! "Stays" is correct. Foden is singular (he), so the verb needs -s. "Stay" is wrong — no -s. And the context ("practise alone while others go home") tells us he stays, not leaves.',
+    reveal:'The answer is "stays." Foden = he = singular, needs -s on the verb. "Stay" is missing -s. "Leaves" contradicts "behind to practise alone."'
+  },
+  {
+    type:'fill',
+    text:'Man City ___ in blue at every home match, and their fans love to wear the same colour.',
+    opts:['play','plays','train','travel'],
+    correct:0,
+    hints:[
+      'In British football English, team names like "Man City" take plural agreement — they are treated as a group of players. And the context is about a match, not a training session. Which two options can you already remove?',
+      '"Train" and "travel" don\'t fit "at every home match." Between "play" and "plays" — in British football English, club names take plural agreement. Which is correct?'
+    ],
+    ok:'Correct! "Play" is right. In British football English, club names like "Man City" are treated as a group and take plural agreement — just like "City score," "United play," and so on.',
+    reveal:'The answer is "play." In British football English, club names take plural agreement — they refer to the whole team. So "Man City play," not "plays." "Train" and "travel" don\'t fit the match-day context.'
+  },
+  {
+    type:'fill',
+    text:'Rodri ___ more ground than anyone else in the team — that is why the coach always picks him first.',
+    opts:['cover','covers','loses','waste'],
+    correct:1,
+    hints:[
+      'Rodri is one person. Find the two options that use the same verb. Which form is correct for he/she/it?',
+      'He/she/it needs -s on the verb. "Cover" has no -s — wrong. "Waste" has no -s — wrong. "Loses" has -s but means something very different from working hard across the pitch.'
+    ],
+    ok:'Right! "Covers" is correct. Rodri = he = singular, so the verb needs -s. "Cover" is missing -s. And the context — "that is why the coach picks him first" — tells us it\'s a positive quality, not losing.',
+    reveal:'The answer is "covers." Rodri = singular = needs -s. "Cover" is missing -s. "Loses" and "waste" don\'t match the positive context of being the coach\'s first pick.'
+  },
+  {
+    type:'fill',
+    text:'Before every match, the Man City players ___ the pitch together to check the conditions.',
+    opts:['enters','enter','avoid','watches'],
+    correct:1,
+    hints:[
+      'The subject is "the Man City players" — that\'s more than one person. Plural subjects do NOT add -s to the verb. Which options have -s?',
+      '"Enters" and "watches" both have -s — wrong for a plural subject. "Avoid" doesn\'t fit the meaning. If they go onto the pitch to check conditions, they must be...'
+    ],
+    ok:'Correct! "Enter" is right. "Players" is plural, so no -s on the verb. "Enters" and "watches" are wrong — they have -s, which is only for singular (he/she/it). "Avoid" doesn\'t fit the meaning.',
+    reveal:'The answer is "enter." Players = plural = no -s on the verb. "Enters" and "watches" wrongly add -s. "Avoid" doesn\'t make sense — they go onto the pitch to check it, not avoid it.'
+  },
+  {
+    type:'fill',
+    text:'When City ___ a goal, the home fans in the stadium jump out of their seats and shout together.',
+    opts:['score','scores','miss','lose'],
+    correct:0,
+    hints:[
+      'Think about what makes home fans "jump out of their seats and shout." Do they do that when their team does something good or something bad?',
+      'Home fans celebrate when their team scores. Now look at "City" — in everyday football English, team names often take plural agreement. Between "score" and "scores," which fits?'
+    ],
+    ok:'Correct! "Score" is right. Home fans jumping and shouting = celebrating = City scoring. In everyday football English, "City score" (plural agreement) is natural. "Miss" and "lose" would make fans sad, not excited.',
+    reveal:'The answer is "score." Fans jump and shout when their team scores — not when they miss or lose. In football English, "City score" uses plural agreement.'
+  },
+  {
+    type:'fill',
+    text:'De Bruyne ___ every free kick carefully before he runs up — he never rushes.',
+    opts:['study','studies','ignore','rush'],
+    correct:1,
+    hints:[
+      'De Bruyne is one person. Find the two options using the same base verb. Which form is correct for he/she/it?',
+      '"Study" has no -s — wrong for he/she/it. "Rush" has no -s — and "he never rushes" already tells you rushing is NOT what he does. "Ignore" contradicts "carefully."'
+    ],
+    ok:'Great! "Studies" is correct. De Bruyne = he = singular = needs -s on the verb. "Study" is missing -s. "He never rushes" tells you "rush" is wrong. "Ignore" contradicts "carefully."',
+    reveal:'The answer is "studies." De Bruyne = he = singular = -s on the verb. "Study" is missing -s. "He never rushes" eliminates "rush." "Ignore" contradicts the idea of doing it carefully.'
+  },
+  {
+    type:'fill',
+    text:'Rodri ___ the game so well that his teammates always look for him when they have the ball.',
+    opts:['read','reads','miss','lose'],
+    correct:1,
+    hints:[
+      'Rodri is one person. Two options here use the same verb. Which form is correct for he/she/it?',
+      '"Read" has no -s — wrong. And think about meaning: "teammates always look for him" means they want him on the ball. Is that because he reads the game well, or because he misses/loses things?'
+    ],
+    ok:'Correct! "Reads" is right. Rodri = he = singular = needs -s. "Read" is missing -s. And the meaning is clear: teammates look for him because he understands the game well — that\'s "reads," not "misses" or "loses."',
+    reveal:'The answer is "reads." Rodri = singular = -s on the verb. "Read" is missing -s. "Teammates always look for him" tells you it\'s a positive quality — reading the game, not missing or losing.'
+  },
+  {
+    type:'fill',
+    text:'Foden rarely ___ under pressure — even in the biggest matches, he always looks calm on the ball.',
+    opts:['shines','panics','improves','trains'],
+    correct:1,
+    hints:[
+      '"Rarely ___" and "always looks calm" are in the same sentence. These two ideas must be compatible. If he always looks calm, what does he rarely do?',
+      'Calm under pressure = he rarely panics. "Shines" would mean he rarely does well — but "always looks calm" suggests the opposite. "Improves" and "trains" don\'t connect to pressure.'
+    ],
+    ok:'Excellent! "Panics" is correct. "Rarely panics" + "always looks calm" go together perfectly. "Rarely shines" would mean he\'s usually bad, which contradicts the sentence. "Improves" and "trains" don\'t connect to the idea of pressure.',
+    reveal:'The answer is "panics." "Rarely panics" + "always looks calm" are a matching pair. The other options don\'t logically connect to staying calm under pressure.'
+  },
+  {
+    type:'fill',
+    text:'Guardiola rarely ___ the same plan twice in a row — he always adapts to the next opponent.',
+    opts:['loses','wins','uses','changes'],
+    correct:2,
+    hints:[
+      '"Rarely ___ the same plan twice" and "always adapts" must make sense together. Think: if he always adapts, does he often repeat the same plan or not?',
+      'If he always adapts, he rarely repeats the same plan. "Rarely uses the same plan" fits. But "rarely changes" would mean he mostly keeps the same plan — that contradicts "always adapts."'
+    ],
+    ok:'Correct! "Uses" is right. "Rarely uses the same plan" + "always adapts" work together — they both say he does something different each time. "Rarely changes" would actually mean the opposite of always adapting.',
+    reveal:'The answer is "uses." "Rarely uses the same plan" = he doesn\'t repeat himself. "Always adapts" confirms this. "Rarely changes" would mean he mostly stays the same — the opposite meaning.'
+  },
+  {
+    type:'fill',
+    text:'The Man City defenders ___ very close to each other so that the other team cannot find space between them.',
+    opts:['stays','stay','avoid','watches'],
+    correct:1,
+    hints:[
+      '"The defenders" is plural — more than one person. Plural subjects do NOT take -s on the verb. Which options can you remove straight away?',
+      '"Stays" and "watches" both have -s — wrong for a plural subject. "Avoid" doesn\'t match the meaning. If they want to stop the other team finding space, they must ___ close together.'
+    ],
+    ok:'Correct! "Stay" is right. "Defenders" = plural = no -s on the verb. "Stays" and "watches" wrongly add -s. And the context — stopping the other team finding space — tells you they stay close together.',
+    reveal:'The answer is "stay." Defenders = plural = no -s. "Stays" and "watches" are wrong. Staying close together is how you prevent the other team finding space between you.'
+  },
+  {
+    type:'fill',
+    text:'The coaching staff ___ match footage every Monday morning to find things to improve.',
+    opts:['ignores','reviews','deletes','publishes'],
+    correct:1,
+    hints:[
+      'Think about the purpose: "to find things to improve." Which action actually helps you find things to improve?',
+      'If you want to improve, you need to look back at what happened. "Ignores" is the opposite. "Deletes" removes the footage. "Publishes" makes it public. Only one option means watching it carefully.'
+    ],
+    ok:'Correct! "Reviews" is right. The purpose "to find things to improve" tells you they watch the footage carefully. "Ignores" is the opposite. "Deletes" or "publishes" don\'t help anyone improve.',
+    reveal:'The answer is "reviews." The clue is "to find things to improve" — you can only do that by watching the footage carefully, not ignoring, deleting, or publishing it.'
+  },
+  {
+    type:'fill',
+    text:'Haaland ___ very few words during a match — he lets his goals do the talking.',
+    opts:['speaks','scores','shouts','forgets'],
+    correct:0,
+    hints:[
+      '"He lets his goals do the talking" is a clue about how he communicates. And "very few words" tells you about the quantity. Which verb goes with "very few words"?',
+      '"Very few words" + "lets his goals do the talking" = he doesn\'t say much. Which verb means producing words or sounds? That\'s the one that fits "very few."'
+    ],
+    ok:'Correct! "Speaks" is right. "Speaks very few words" fits perfectly with "lets his goals do the talking" — he doesn\'t say much, he shows it on the pitch instead. "Scores," "shouts," and "forgets" don\'t connect to "words."',
+    reveal:'The answer is "speaks." "Speaks very few words" + "lets his goals do the talking" are a matching pair. The other options don\'t connect to the idea of saying words.'
+  },
+  {
+    type:'fill',
+    text:'Guardiola ___ his players to think for themselves on the pitch, not just follow fixed instructions.',
+    opts:['forbids','encourages','replaces','watches'],
+    correct:1,
+    hints:[
+      '"Think for themselves, not just follow fixed instructions" — does this sound like something a manager allows and supports, or something he bans?',
+      'If he wants them to think freely, he supports that idea. "Forbids" means banning it — the opposite. "Replaces" and "watches" don\'t connect to encouraging independent thinking.'
+    ],
+    ok:'Correct! "Encourages" is right. "Think for themselves, not just follow fixed instructions" tells you Guardiola actively supports this. "Forbids" would mean the opposite. "Replaces" and "watches" don\'t fit.',
+    reveal:'The answer is "encourages." The phrase "think for themselves, not just follow instructions" tells you Guardiola supports this behaviour — that\'s encouraging, not forbidding.'
+  },
+
+  // ── ODD ONE OUT Q17-20 ──
+  {
+    type:'odd',
+    context:'Three sentences describe what Haaland does regularly. One does not belong — it describes something that happened only once. Find it.',
+    opts:[
+      'Haaland scores in nearly every match he plays for City.',
+      'Haaland works on his movement in training every single week.',
+      'Haaland broke the Premier League scoring record in his first season.',
+      'Haaland pushes himself harder than anyone else in every session.'
+    ],
+    correct:2,
+    hints:[
+      'Read each sentence carefully. Three describe repeated habits. One describes a single completed event. Can you spot a verb that signals the past?',
+      '"Broke" is past simple — it describes something that already happened and finished. The other three verbs (scores, works, pushes) are all present simple, describing regular habits.'
+    ],
+    ok:'Correct! Sentence C is the odd one out. "Broke" is past simple — it describes a one-time completed event (breaking the record). The other three use present simple to describe ongoing habits.',
+    reveal:'The answer is C. "Broke" = past simple = one completed event. "Scores," "works," and "pushes" = present simple = regular habits. That\'s the difference.'
+  },
+  {
+    type:'odd',
+    context:'Three sentences describe what De Bruyne does in every match. One does not belong. Find it.',
+    opts:[
+      'De Bruyne looks for spaces between the opposition lines constantly.',
+      'De Bruyne switches the play to change the angle of attack.',
+      'De Bruyne spent six months injured and missed half the season.',
+      'De Bruyne tracks back to help his team when they lose the ball.'
+    ],
+    correct:2,
+    hints:[
+      'Read each sentence fully. Three describe things De Bruyne does in matches. One describes a period of time that has already finished. Which one?',
+      '"Spent" and "missed" are both past simple. That sentence describes an injury period that already ended — not something he does every match. The other three are present simple habits.'
+    ],
+    ok:'Correct! Sentence C is the odd one out. "Spent" and "missed" are past simple — they describe a finished period of injury. The other three sentences use present simple to describe his regular match habits.',
+    reveal:'The answer is C. "Spent" and "missed" = past simple = a finished event. The other sentences use present simple to describe what De Bruyne regularly does in matches.'
+  },
+  {
+    type:'odd',
+    context:'Three sentences describe what Ederson does in every match. One does not belong. Find it.',
+    opts:[
+      'Ederson starts attacks with accurate passes to the forwards.',
+      'Ederson communicates constantly with the defenders in front of him.',
+      'Ederson grew up in Brazil and learned his skills at a local club.',
+      'Ederson comes off his line quickly when attackers get behind the defence.'
+    ],
+    correct:2,
+    hints:[
+      'Three sentences describe actions Ederson repeats every match. One describes his background and early life. Read carefully — which one is about his past, not his current match habits?',
+      '"Grew up" and "learned" are past simple. They describe his childhood and early career — finished events, not things he does every match. The other three use present simple.'
+    ],
+    ok:'Correct! Sentence C is the odd one out. "Grew up" and "learned" are past simple — they describe his background, not his match-day habits. The other three use present simple to describe what he does every game.',
+    reveal:'The answer is C. "Grew up" and "learned" = past simple = background facts from the past. The other three = present simple = regular match actions.'
+  },
+  {
+    type:'odd',
+    context:'Three sentences describe what Foden does regularly. One does not belong. Find it.',
+    opts:[
+      'Foden drifts inside from the left to create space for the full-back.',
+      'Foden links up with Haaland in tight spaces around the penalty area.',
+      'Foden joined Man City\'s academy when he was only eight years old.',
+      'Foden drops deep to receive the ball and start attacks from midfield.'
+    ],
+    correct:2,
+    hints:[
+      'Three sentences describe Foden\'s regular playing style. One describes a moment from his childhood. Read the full sentences — which one is about the past?',
+      '"Joined" is past simple. "When he was only eight years old" confirms it\'s a past event. The other three verbs — drifts, links up, drops — are all present simple describing his current style.'
+    ],
+    ok:'Correct! Sentence C is the odd one out. "Joined" is past simple, and "when he was only eight years old" confirms it\'s a past event. The other three use present simple to describe his regular playing style.',
+    reveal:'The answer is C. "Joined" = past simple = a past event from his childhood. "Drifts," "links up," and "drops" = present simple = his regular current playing style.'
+  }
+];
+
+// ── STATE ──
+let cur = 0, score = 0, attempts = 0;
+const MAX = 3;
+const LETTERS = ['A','B','C','D'];
+
+// Fisher-Yates shuffle that tracks the correct answer
+function shuffleOpts(opts, correctIdx) {
+  const indexed = opts.map((o,i) => ({text:o, isCorrect: i === correctIdx}));
+  for (let i = indexed.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indexed[i], indexed[j]] = [indexed[j], indexed[i]];
+  }
+  return {
+    opts: indexed.map(o => o.text),
+    correct: indexed.findIndex(o => o.isCorrect)
+  };
+}
+
+// Store shuffled state per question
+const shuffled = QS.map(q => {
+  const r = shuffleOpts(q.opts, q.correct);
+  return { opts: r.opts, correct: r.correct };
+});
+
+function updateProg() {
+  const pct = Math.round((cur / QS.length) * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = cur + ' / ' + QS.length;
+}
+
+function render() {
+  updateProg();
+  attempts = 0;
+  const q = QS[cur];
+  const sh = shuffled[cur];
+  const area = document.getElementById('quiz');
+
+  let html = '<div class="card">';
+
+  // Meta
+  html += '<div class="q-meta">';
+  if (q.type === 'fill') {
+    html += '<span class="q-badge badge-fill">✏️ Fill in the blank</span>';
+  } else {
+    html += '<span class="q-badge badge-odd">🔍 Odd one out</span>';
+  }
+  html += '<span class="q-num">Q' + (cur+1) + ' of ' + QS.length + '</span>';
+  html += '</div>';
+
+  // Dots
+  html += '<div class="dots">';
+  for (let i = 0; i < MAX; i++) html += '<div class="dot" id="dot'+i+'"></div>';
+  html += '</div>';
+
+  // Context block (odd one out)
+  if (q.type === 'odd') {
+    html += '<div class="q-context">' + q.context + '</div>';
+  }
+
+  // Question text (fill)
+  if (q.type === 'fill') {
+    const display = q.text.replace('___', '<span class="q-blank">___</span>');
+    html += '<p class="q-text" style="margin-top:12px">' + display + '</p>';
+  }
+
+  // Options
+  html += '<div class="opts" id="opts">';
+  sh.opts.forEach((opt, i) => {
+    html += '<button class="opt" id="opt'+i+'" onclick="pick('+i+')">';
+    html += '<span class="opt-ltr">'+LETTERS[i]+'</span>';
+    html += '<span>'+opt+'</span>';
+    html += '</button>';
+  });
+  html += '</div>';
+
+  html += '<div class="fb" id="fb"></div>';
+  html += '</div>'; // card
+
+  html += '<div class="nav"><button class="btn-next" id="nxt" onclick="next()" disabled>Next ▶</button></div>';
+
+  area.innerHTML = html;
+}
+
+function pick(idx) {
+  const sh = shuffled[cur];
+  const q = QS[cur];
+  const correct = sh.correct;
+  const btns = document.querySelectorAll('.opt');
+  const fb = document.getElementById('fb');
+  const nxt = document.getElementById('nxt');
+
+  if (idx === correct) {
+    btns[idx].classList.add('correct');
+    btns.forEach(b => b.disabled = true);
+    score++;
+    fb.className = 'fb fb-ok';
+    fb.innerHTML = '<div class="fb-title">✅ Correct!</div>' + q.ok;
+    fb.style.display = 'block';
+    nxt.disabled = false;
+  } else {
+    attempts++;
+    updateDots();
+    btns[idx].classList.add('wrong');
+    btns[idx].disabled = true;
+    setTimeout(() => btns[idx].classList.remove('wrong'), 700);
+
+    if (attempts >= MAX) {
+      btns.forEach(b => b.disabled = true);
+      btns[correct].classList.add('reveal-ans');
+      fb.className = 'fb fb-reveal';
+      fb.innerHTML = '<div class="fb-title">💡 Answer revealed</div>' + q.reveal;
+      fb.style.display = 'block';
+      nxt.disabled = false;
+    } else {
+      const hint = q.hints[attempts - 1] || q.hints[q.hints.length - 1];
+      fb.className = 'fb fb-hint';
+      fb.innerHTML = '<div class="fb-title">Not quite — try again!</div>' + hint;
+      fb.style.display = 'block';
+    }
+  }
+}
+
+function updateDots() {
+  for (let i = 0; i < MAX; i++) {
+    const d = document.getElementById('dot'+i);
+    if (d && i < attempts) d.classList.add('used');
+  }
+}
+
+function next() {
+  cur++;
+  if (cur >= QS.length) showEnd();
+  else { render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+function showEnd() {
+  document.getElementById('quiz').style.display = 'none';
+  document.querySelector('.prog-wrap').style.display = 'none';
+  const end = document.getElementById('end');
+  end.style.display = 'block';
+
+  document.getElementById('end-score').textContent = score;
+  document.getElementById('end-sub').textContent = 'out of ' + QS.length;
+
+  let icon, title, msg;
+  const pct = score / QS.length;
+
+  if (pct === 1) {
+    icon='🏆'; title='Perfect Score!';
+    msg='Incredible! You got every single question right. You can clearly read meaning in context and understand subject-verb agreement in present simple. Pep Guardiola would sign you as a grammar coach.';
+  } else if (pct >= 0.8) {
+    icon='🥇'; title='Champions League Final!';
+    msg='Brilliant work. You clearly understand how to match verbs to context and how subjects affect verb forms. Go back and check the ones you missed — focus on WHY that verb fits the meaning.';
+  } else if (pct >= 0.6) {
+    icon='🥈'; title='Europa League Spot!';
+    msg='Good effort. You are getting there. Remember: always read the full sentence, not just the blank. The clues are in the words around it, not just the gap itself.';
+  } else if (pct >= 0.4) {
+    icon='🔧'; title='Back to Training!';
+    msg='Keep going — it takes time. Focus on two things: 1) he/she/it = verb + -s, they/we/you = no -s. 2) Read the whole sentence for clues about meaning before choosing. Try again!';
+  } else {
+    icon='⚽'; title='Pre-season Mode!';
+    msg='Everyone starts somewhere. The key is: read the whole sentence carefully before picking an answer. The meaning clues are always there. Give it another go!';
+  }
+
+  document.getElementById('end-icon').textContent = icon;
+  document.getElementById('end-title').textContent = title;
+  document.getElementById('end-msg').textContent = msg;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart() {
+  cur = 0; score = 0; attempts = 0;
+  // Re-shuffle all questions
+  QS.forEach((q,i) => {
+    const r = shuffleOpts(q.opts, q.correct);
+    shuffled[i] = { opts: r.opts, correct: r.correct };
+  });
+  document.getElementById('end').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  document.querySelector('.prog-wrap').style.display = 'flex';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+render();
+</script>
+</body>
+</html>
